@@ -1,0 +1,242 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+}
+
+.hidden {
+  display: none;
+}
+
+body {
+  color: black;
+  font-size: 13px;
+  background: url(img/bright-background-with-dots_1055-3132.jpg) center center/cover no-repeat fixed;
+}
+
+.todo {
+  background-color: white;
+  padding: 60px 0 40px;
+  min-height: 100vh;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  color: white;
+  background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+  width: 100%;
+  padding: 15px 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.logo-border {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 10%;
+  border-radius: 100%;
+  background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+  background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+  width: 97%;
+  height: 97%;
+  border-radius: 100%;
+  border: white solid 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo img {
+  width: 120px;
+  transition: 0.5s all;
+}
+.logo img:hover {
+  transform: scale(1.1);
+}
+
+.todo-content {
+  padding-top: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.edit-section {
+  text-align: right;
+  display: inline-block;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  transition: 0.5s all;
+}
+.edit-section:hover {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.accordion-wrapper {
+  margin: 30px auto;
+  width: 60%;
+}
+
+ol {
+  font-size: 20px;
+}
+
+li {
+  text-align: start;
+  display: list-item;
+}
+
+.menu ul {
+  margin: 0;
+  padding-left: 20px;
+  display: none;
+  list-style: disc;
+}
+.menu .title_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.menu .title_wrapper .title {
+  font-size: 18px;
+  padding-right: 10px;
+  cursor: pointer;
+  transition: 0.5s all;
+  display: inline-block;
+  position: relative;
+  background-color: white;
+  z-index: 2;
+}
+.menu .title_wrapper .title:before {
+  content: "▶ ";
+  font-size: 80%;
+  color: black;
+}
+.menu .title_wrapper .button-wrapper {
+  position: relative;
+}
+.menu .title_wrapper .button-wrapper:before {
+  content: "....................................................................................................................................................................................";
+  position: absolute;
+  color: grey;
+  right: 40px;
+  z-index: 0;
+}
+.menu .title_wrapper .button-wrapper button {
+  background: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  transition: 0.5s all;
+}
+.menu .title_wrapper .button-wrapper button img {
+  width: 100%;
+}
+.menu .title_wrapper .button-wrapper button:hover {
+  transform: scale(1.1);
+}
+
+.menu.open .title::before {
+  content: "▼ ";
+}
+
+.menu.open ul {
+  display: block;
+}
+
+.menu.open .title_wrapper .title {
+  transition: 0.5s all;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.innerItem {
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.innerItem span {
+  position: relative;
+}
+.innerItem span:after {
+  content: "...........................................................................................................................................................................................";
+  position: absolute;
+  color: lightgrey;
+}
+.innerItem .button-group {
+  background-color: white;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  position: relative;
+}
+.innerItem .button-group .doneButton {
+  background-color: white;
+  width: 35px;
+  height: 35px;
+  border: none;
+  position: relative;
+  transition: 0.5s all;
+}
+.innerItem .button-group .doneButton:nth-child(3) {
+  width: 40px;
+  height: 35px;
+}
+.innerItem .button-group .doneButton:hover {
+  transform: scale(1.2);
+}
+.innerItem .button-group .doneButton img {
+  width: 100%;
+}
+.innerItem .button-group .done {
+  opacity: 30%;
+}
+
+.done .innerItem span {
+  text-decoration: line-through;
+  font-style: italic;
+}
+.done .innerItem span a {
+  text-decoration: none;
+  color: black;
+}
+
+.list-item-form {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 13px;
+  width: 100%;
+}
+.list-item-form button {
+  margin-left: 20px;
+  font-size: 13px;
+}
+.list-item-form input {
+  width: 400px;
+}
+
+.video-wrapper {
+  background: white;
+  position: relative;
+}
+
+/*# sourceMappingURL=App.css.map */
