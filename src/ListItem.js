@@ -6,7 +6,7 @@ import deleteImg
 
 function ListItem(props) {
     const {item, edit, section, list, setList} = props
-    const [youTube, setYouTube] = useState(false)
+    const [inputClass, setInputClass] = useState('hidden')
     const [videoLink, setVideoLink]= useState('')
     const doneButtonHandler = () => {
         const newSectionContent = section.content.map(el => el.id === item.id ? {...el, done: !el.done} : el)
@@ -23,12 +23,16 @@ function ListItem(props) {
     const addVideoLink = () => {
         const newSectionContent = section.content.map(el => el.id === item.id ? {...el, video: videoLink} : el)
         const newList = list.map(el => el.title === section.title ? {...el, content: newSectionContent} : el)
-        setYouTube(false)
         setList(newList)
     
     }
-    const videoInputHandler = () => {
-        setYouTube(!youTube)
+    function videoInputHandler() {
+        if(inputClass==='hidden')setInputClass("video-input animate__animated animate__fadeInRight")
+        else setInputClass("video-input animate__animated animate__fadeOutRight")
+    }
+    function AnimationEndHandler() {
+        if(inputClass==="video-input animate__animated animate__fadeOutRight")setInputClass('hidden')
+        
     }
     return (
         <li className={item.done && "done"}>
@@ -47,10 +51,10 @@ function ListItem(props) {
                                     onClick={videoInputHandler}>
                                        <img src={youTubeImg} alt="doneButton"/>
                                     </button>
-                                    <input className={youTube? "video-input": "hidden"}
-                                           placeholder="add You Tube link"
+                                    <input className={inputClass}
+                                           placeholder="add You Tube link" onAnimationEnd={AnimationEndHandler}
                                     value={videoLink} onChange={(e)=>setVideoLink(e.target.value)}/>
-                                    <button className={youTube ? "btn btn-outline-secondary":"hidden"}
+                                    <button className={inputClass!=='hidden' ? "btn":"hidden"}
                                     onClick={addVideoLink}>ok</button>
                     </div>
                     }

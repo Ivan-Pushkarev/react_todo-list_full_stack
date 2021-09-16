@@ -14,9 +14,12 @@ function App() {
     const [edit, setEdit] = useState(editorMode)
     const [logoClass, setLogoClass]= useState("animate__flipOutY animate__animated animate__slower")
     const [newSection, setNewSection] = useState('')
+    const [formClass, setFormClass] = useState('hidden')
     
     const editHandler = () => {
         setEdit(!edit)
+        !edit? setFormClass("animate__fadeInUp animate__animated mt-4"):
+              setFormClass("animate__fadeOutDown animate__animated mt-4")
     }
     const formSubmitHandler = () => {
         const newList = [...list, {
@@ -25,7 +28,6 @@ function App() {
             content: []
         }]
         setList(newList)
-        setNewSection('')
        
     }
     const logoHandler = () => {
@@ -33,6 +35,9 @@ function App() {
         setTimeout(()=>{
             setLogoClass("animate__flipOutY animate__animated animate__slower animate")
         }, 20000)
+    }
+    const formAnimationEnd = () => {
+        if(formClass==="animate__fadeOutDown animate__animated mt-4") setFormClass("hidden")
     }
     localStorage.setItem('list', JSON.stringify(list))
     localStorage.setItem('editorMode', JSON.stringify(edit))
@@ -57,7 +62,7 @@ function App() {
                 <h2>Структура курса React. Секции и лекции:</h2>
                 <span className="edit-section" onClick={editHandler}>Редактировать</span>
                 <div className="accordion-wrapper">
-                    <form className={!edit && 'hidden'}>
+                    <form className={formClass} onAnimationEnd={formAnimationEnd}>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Введите название новой
                                 секции</label>

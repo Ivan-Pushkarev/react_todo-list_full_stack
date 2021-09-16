@@ -48,7 +48,7 @@ function Section(props) {
                     <button className="btn btn-outline-secondary" onClick={addListItemHandler}>Добавить</button>
                 </form>
             }
-            <ul>
+            <ul className="animate__animated animate__fadeIn animate__slow">
                 {
                     section.content.map(el => <ListItem key={el.id}
                                                         item={el}
