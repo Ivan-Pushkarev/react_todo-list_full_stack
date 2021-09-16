@@ -61,7 +61,7 @@ function App() {
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Введите название новой
                                 секции</label>
-                            <input type="email" className="form-control" id="exampleInputEmail1"
+                            <input type="text" className="form-control" id="exampleInputEmail1"
                                    aria-describedby="emailHelp"
                                    value={newSection} onChange={(e) => setNewSection(e.target.value)}/>
                         </div>

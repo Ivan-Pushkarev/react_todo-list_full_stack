@@ -41,7 +41,7 @@ function Section(props) {
                     <div className="mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Введите название нового подраздела для этой
                             секции</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1"
+                        <input type="text" className="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp"
                                value={listItem} onChange={(e) => setListItem(e.target.value)}/>
                     </div>
