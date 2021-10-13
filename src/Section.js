@@ -1,45 +1,57 @@
 import React, {useState} from 'react';
 import ListItem from "./ListItem";
-import deleteImg
-    from './img/delete_4.svg'
+import deleteImg from './img/delete_4.svg'
+import editImg from './img/icon-edit-png-0.jpg'
 
 function Section(props) {
-    const {section, edit, list, setList} = props
+    const {section, auth, API, sectionGetAll} = props
     const [listItem, setListItem] = useState('')
+    const [sectionOpen, setSectionOpen] = useState(false)
     
     const openSection = () => {
-        const newList = list.map(el => el.title === section.title ? {...el, open: !el.open} : el)
-        setList(newList)
+        setSectionOpen(prev => !prev)
     }
     
-    const deleteSectionHandler = () => {
-        const newList = list.filter(el => el.title !== section.title)
-        setList(newList)
+    const deleteSectionHandler = (id) => {
+        API.delete(`/section/${id}`)
+            .then(() => {
+                sectionGetAll()
+            })
+            .catch(err => console.log(err))
     }
-    const addListItemHandler = () => {
-        const newListItem = {
-            id: Math.random(),
-            done: false,
-            name: listItem
+    
+    const addListItemHandler = (e) => {
+        e.preventDefault()
+        const newTask = {
+            section: section._id,
+            description: listItem
         }
-        const newList = list.map(el => el.title === section.title ? {...el,content: [...el.content, newListItem]} : el)
-        setList(newList)
-        }
-  
+        API.post('/task', newTask)
+            .then(() => {
+                setListItem('')
+                sectionGetAll()
+            })
+            .catch(err => console.log(err))
+    }
+    
     return (
-        <li className={section.open ? "menu open" : "menu"}>
+        <li className={sectionOpen ? "menu open" : "menu"}>
             <div className="title_wrapper">
                 <span className="title" onClick={openSection}>{section.title}</span>
-                <div className={edit? "button-wrapper": "button-wrapper hidden"}>
-                    <button  onClick={deleteSectionHandler}>
+                <div className={auth ? "button-wrapper" : "button-wrapper hidden"}>
+                    <button >
+                        <img src={editImg} alt="delete"/>
+                    </button>
+                    <button onClick={() => deleteSectionHandler(section._id)}>
                         <img src={deleteImg} alt="delete"/>
                     </button>
                 </div>
             </div>
             {
-                edit &&  <form className={section.open? 'list-item-form ': 'hidden'}>
+                auth && <form className={sectionOpen ? 'list-item-form ' : 'hidden'}>
                     <div className="mb-3">
-                        <label htmlFor="exampleInputEmail1" className="form-label">Введите название нового подраздела для этой
+                        <label htmlFor="exampleInputEmail1" className="form-label">Введите название нового подраздела
+                            для этой
                             секции</label>
                         <input type="text" className="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp"
@@ -49,14 +61,14 @@ function Section(props) {
                 </form>
             }
             <ul className="animate__animated animate__fadeIn animate__slow">
+                
                 {
-                    section.content.map(el => <ListItem key={el.id}
-                                                        item={el}
-                                                        section={section}
-                                                        edit={edit}
-                                                        list={list}
-                                                        setList={setList}
-                    
+                    sectionOpen && section.task.map(el => <ListItem key={el._id}
+                                                                    item={el}
+                                                                    auth={auth}
+                                                                    API={API}
+                                                                    sectionGetAll={sectionGetAll}
+                                                                    
                     />)
                 }
             </ul>

@@ -5,25 +5,33 @@ import deleteImg
     from './img/transparent-solid-web-buttons-icon-trash-icon-delete-icon-5dcb353c1c3720.1008941715735985241156.png'
 
 function ListItem(props) {
-    const {item, edit, section, list, setList} = props
+    const {item, auth, API, sectionGetAll} = props
     const [inputClass, setInputClass] = useState('hidden')
     const [videoLink, setVideoLink]= useState('')
     const doneButtonHandler = () => {
-        const newSectionContent = section.content.map(el => el.id === item.id ? {...el, done: !el.done} : el)
-        const newList = list.map(el => el.title === section.title ? {...el, content: newSectionContent} : el)
-        setList(newList)
+        // const newSectionContent = section.content.map(el => el.id === item.id ? {...el, done: !el.done} : el)
+        // const newList = list.map(el => el.title === section.title ? {...el, content: newSectionContent} : el)
+        // setList(newList)
     }
     
     const deleteItemHandler = () => {
-        const newContent = section.content.filter(el => el.id !== item.id)
-        const newList = list.map(el => el.title === section.title ? {...el, content: newContent} : el)
-        setList(newList)
+      API.delete(`/task/${item._id}`)
+            .then(() => {
+                setVideoLink('')
+                sectionGetAll()
+            })
+            .catch(err => console.log(err))
+    
         
     }
     const addVideoLink = () => {
-        const newSectionContent = section.content.map(el => el.id === item.id ? {...el, video: videoLink} : el)
-        const newList = list.map(el => el.title === section.title ? {...el, content: newSectionContent} : el)
-        setList(newList)
+        API.patch(`/task/${item._id}`, {video: videoLink})
+            .then(() => {
+                setVideoLink('')
+                setInputClass('hidden')
+                sectionGetAll()
+            })
+            .catch(err => console.log(err))
     
     }
     function videoInputHandler() {
@@ -38,28 +46,32 @@ function ListItem(props) {
         <li className={item.done && "done"}>
             <div className="innerItem">
                 <span>
-                    {item.name} {' '}
-                    {item.video && <a href={item.video}>Смотреть видео</a>}
+                    {item.description} {' '}
+                    {item.video && <a href={item.video} target="_blank">Смотреть видео</a>}
                 </span>
                 <div className="button-group">
-                    <button className={item.done ? "doneButton done" : "doneButton"} onClick={doneButtonHandler}>
-                        <img src={doneImg} alt="doneButton"/>
-                    </button>
                     {
-                        edit && <div className="video-wrapper">
+        
+                        !auth && <button className={item.done ? "doneButton done" : "doneButton"} onClick={doneButtonHandler}>
+                            <img src={doneImg} alt="doneButton"/>
+                        </button>
+                    }
+                    {
+                        auth && <div className="video-wrapper">
                                     <button className={item.done ? "doneButton done" : "doneButton"}
                                     onClick={videoInputHandler}>
                                        <img src={youTubeImg} alt="doneButton"/>
                                     </button>
                                     <input className={inputClass}
                                            placeholder="add You Tube link" onAnimationEnd={AnimationEndHandler}
-                                    value={videoLink} onChange={(e)=>setVideoLink(e.target.value)}/>
-                                    <button className={inputClass!=='hidden' ? "btn":"hidden"}
+                                           value={videoLink}
+                                           onChange={(e)=>setVideoLink(e.target.value)}/>
+                                    <button className={inputClass!=='hidden' ? "btn btn-danger btn-sm":"hidden"}
                                     onClick={addVideoLink}>ok</button>
                     </div>
                     }
                     {
-                        edit && <button className={item.done ? "doneButton done" : "doneButton"}
+                        auth && <button className={item.done ? "doneButton done" : "doneButton"}
                                         onClick={deleteItemHandler}>
                             <img src={deleteImg} alt="doneButton"/>
                         </button>
