@@ -40,7 +40,7 @@ body {
   height: 200px;
   left: 10%;
   border-radius: 100%;
-  background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+  background: url("./img/subtle_carbon.jpg");
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +48,7 @@ body {
 }
 
 .logo {
-  background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+  background: url("./img/subtle_carbon.jpg");
   width: 97%;
   height: 97%;
   border-radius: 100%;
@@ -190,15 +190,15 @@ li {
 }
 .innerItem .button-group .doneButton {
   background-color: white;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border: none;
   position: relative;
   transition: 0.5s all;
 }
-.innerItem .button-group .doneButton:nth-child(3) {
-  width: 40px;
-  height: 35px;
+.innerItem .button-group .doneButton:nth-child(3) img {
+  width: 110%;
+  height: 90%;
 }
 .innerItem .button-group .doneButton:hover {
   transform: scale(1.2);
@@ -219,24 +219,11 @@ li {
   color: black;
 }
 
-.list-item-form {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  font-size: 13px;
-  width: 100%;
-}
-.list-item-form button {
-  margin-left: 20px;
+.form-fontsize {
   font-size: 13px;
 }
-.list-item-form input {
+.form-fontsize input {
   width: 400px;
-}
-
-.video-wrapper {
-  background: white;
-  position: relative;
 }
 
 /*# sourceMappingURL=App.css.map */

@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import doneImg from './img/completed-icon-0.jpg'
+import taskEditImg from './img/images.png'
 import youTubeImg from './img/youtube-logo-png-3573.png'
 import deleteImg
     from './img/transparent-solid-web-buttons-icon-trash-icon-delete-icon-5dcb353c1c3720.1008941715735985241156.png'
 
 function ListItem(props) {
     const {item, auth, API, sectionGetAll} = props
-    const [inputClass, setInputClass] = useState('hidden')
-    const [videoLink, setVideoLink]= useState('')
+    const [videoInputClass, setVideoInputClass] = useState('hidden')
+    const [editInputClass, setEditInputClass] = useState('hidden')
+    const [videoLink, setVideoLink] = useState('')
+    const [editTask, setEditTask] = useState(item.description)
     const doneButtonHandler = () => {
         // const newSectionContent = section.content.map(el => el.id === item.id ? {...el, done: !el.done} : el)
         // const newList = list.map(el => el.title === section.title ? {...el, content: newSectionContent} : el)
@@ -15,33 +18,45 @@ function ListItem(props) {
     }
     
     const deleteItemHandler = () => {
-      API.delete(`/task/${item._id}`)
+        API.delete(`/task/${item._id}`)
             .then(() => {
                 setVideoLink('')
                 sectionGetAll()
             })
             .catch(err => console.log(err))
-    
+        
         
     }
     const addVideoLink = () => {
         API.patch(`/task/${item._id}`, {video: videoLink})
             .then(() => {
                 setVideoLink('')
-                setInputClass('hidden')
+                setVideoInputClass('hidden')
                 sectionGetAll()
             })
             .catch(err => console.log(err))
-    
-    }
-    function videoInputHandler() {
-        if(inputClass==='hidden')setInputClass("video-input animate__animated animate__fadeInRight")
-        else setInputClass("video-input animate__animated animate__fadeOutRight")
-    }
-    function AnimationEndHandler() {
-        if(inputClass==="video-input animate__animated animate__fadeOutRight")setInputClass('hidden')
         
     }
+    
+    function inputClassHandler(name) {
+        if (name === 'video') {
+            if (videoInputClass === 'hidden') setVideoInputClass("video-input animate__animated animate__fadeInRight")
+            else setVideoInputClass("video-input animate__animated animate__fadeOutRight")
+        } else{
+            if (editInputClass === 'hidden') setEditInputClass("video-input animate__animated animate__fadeInRight")
+            else setEditInputClass("video-input animate__animated animate__fadeOutRight")
+        }
+    }
+    
+    function videoAnimationEndHandler() {
+        if (videoInputClass === "video-input animate__animated animate__fadeOutRight")
+            setVideoInputClass('hidden')
+    }
+    function editAnimationEndHandler() {
+        if (editInputClass === "video-input animate__animated animate__fadeOutRight")
+            setEditInputClass('hidden')
+    }
+    
     return (
         <li className={item.done && "done"}>
             <div className="innerItem">
@@ -51,31 +66,50 @@ function ListItem(props) {
                 </span>
                 <div className="button-group">
                     {
-        
-                        !auth && <button className={item.done ? "doneButton done" : "doneButton"} onClick={doneButtonHandler}>
+                        
+                        !auth &&
+                        <button className={item.done ? "doneButton done" : "doneButton"} onClick={doneButtonHandler}>
                             <img src={doneImg} alt="doneButton"/>
                         </button>
                     }
+                    
                     {
-                        auth && <div className="video-wrapper">
-                                    <button className={item.done ? "doneButton done" : "doneButton"}
-                                    onClick={videoInputHandler}>
-                                       <img src={youTubeImg} alt="doneButton"/>
-                                    </button>
-                                    <input className={inputClass}
-                                           placeholder="add You Tube link" onAnimationEnd={AnimationEndHandler}
-                                           value={videoLink}
-                                           onChange={(e)=>setVideoLink(e.target.value)}/>
-                                    <button className={inputClass!=='hidden' ? "btn btn-danger btn-sm":"hidden"}
-                                    onClick={addVideoLink}>ok</button>
-                    </div>
+                        auth && <div>
+                            <button className={item.done ? "doneButton done" : "doneButton"}
+                                    onClick={() => inputClassHandler('edit')}>
+                                <img src={taskEditImg} alt="task edit button"/>
+                            </button>
+                            <input className={editInputClass}
+                                   onAnimationEnd={editAnimationEndHandler}
+                                   value={editTask}
+                                   onChange={(e) => setEditTask(e.target.value)}/>
+                            <button className={editInputClass !== 'hidden' ? "btn btn-secondary btn-sm" : "hidden"}
+                                    onClick={addVideoLink}>ok
+                            </button>
+                        </div>
+                    }
+                    {
+                        auth && <div>
+                            <button className={item.done ? "doneButton done" : "doneButton"}
+                                    onClick={() => inputClassHandler('video')}>
+                                <img src={youTubeImg} alt="you tube button"/>
+                            </button>
+                            <input className={videoInputClass}
+                                   placeholder="add You Tube link" onAnimationEnd={videoAnimationEndHandler}
+                                   value={videoLink}
+                                   onChange={(e) => setVideoLink(e.target.value)}/>
+                            <button className={videoInputClass !== 'hidden' ? "btn btn-danger btn-sm" : "hidden"}
+                                    onClick={addVideoLink}>ok
+                            </button>
+                        </div>
                     }
                     {
                         auth && <button className={item.done ? "doneButton done" : "doneButton"}
                                         onClick={deleteItemHandler}>
-                            <img src={deleteImg} alt="doneButton"/>
+                            <img src={deleteImg} alt="delete task button"/>
                         </button>
                     }
+                
                 
                 </div>
             </div>

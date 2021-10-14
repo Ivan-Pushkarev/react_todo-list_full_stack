@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './App.css';
 import "animate.css"
 import logo from './img/Logo.svg'
-import baseList from './list'
 import Section from "./Section";
 import axios from "axios";
 import {useEffect, useState} from "react";
@@ -15,8 +14,15 @@ function App() {
     
     const [list, setList] = useState([])
     const [auth, setAuth] = useState(true)
+    const [login, setLogin] = useState(true)
+    const [registration, setRegistration] = useState(true)
     const [logoClass, setLogoClass] = useState("animate__flipOutY animate__animated animate__slower")
     const [newSection, setNewSection] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [repeat, setRepeat] = useState('')
+    
+    
     const API = axios.create({baseURL: 'http://localhost:8000'})
     
     useEffect(() => {
@@ -31,12 +37,7 @@ function App() {
             console.log('Tasks get all error')
         }
     }
-    
-    const editHandler = () => {
-        // setEdit(!edit)
-        // !edit? setFormClass("animate__fadeInUp animate__animated mt-4"):
-        //       setFormClass("animate__fadeOutDown animate__animated mt-4")
-    }
+   
     const formSubmitHandler = (e) => {
         e.preventDefault()
         API.post('/section', {title: newSection})
@@ -47,6 +48,23 @@ function App() {
             .catch(err => console.log(err))
         
     }
+    
+    const submitButtonHandler = () => {
+        const data= { email, password}
+        let url = '/user/signIn'
+        if(registration) {
+            data.checkPassword = repeat
+            url = '/user/signUp'
+        }
+        API.post(url, data)
+            .then((res) => {
+                setAuth(res)
+            })
+            .catch(err => console.log(err))
+        
+    
+    }
+    
     const logoHandler = () => {
         // setLogoClass("animate__flipInY animate__animated animate__slower")
         // setTimeout(() => {
@@ -77,9 +95,52 @@ function App() {
                 </div>
             </div>
             <div className="todo-content">
-                <h2>Структура курса React. Секции и лекции:</h2>
-                <span className="edit-section" onClick={editHandler}>Редактировать</span>
-                <div className="accordion-wrapper">
+                <h2>{!login? 'Структура курса React. Секции и лекции:': registration? 'Форма регистрации': 'Форма' +
+                    ' авторизации'}</h2>
+                <span className="edit-section" onClick={()=> setLogin(prev=>!prev)}>
+                    {auth? 'Выйти':'Логин / Регистрация'}</span>
+                {
+                    login && <div className="row mt-5">
+                        <div className="offset-3 col-6">
+                            <h6 className="pb-1">
+                                {registration? 'Уже имеете аккаунт на нашем портале? Тогда перейдите в форму логина'
+                                    : 'Еще нет аккаунта? Тогда перейдите в форму регистрации'}</h6>
+                            <button className="btn btn-secondary btn-sm mb-3" onClick={()=>setRegistration(prev=>!prev)}>Перейти</button>
+                            <form>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+                                    <div className="col-sm-10">
+                                        <input type="email" className="form-control" id="inputEmail3"
+                                        value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>
+                                    <div className="col-sm-10">
+                                        <input type="password" className="form-control" id="inputPassword3"
+                                               value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                                    </div>
+                                </div>
+                                {
+                                    registration &&  <div className="row mb-3">
+                                        <label htmlFor="checkPassword" className="col-sm-2 col-form-label">Repeat Password</label>
+                                        <div className="col-sm-10">
+                                            <input type="password" className="form-control" id="checkPassword"
+                                                   value={repeat} onChange={(e)=>setRepeat(e.target.value)}/>
+                                        </div>
+                                    </div>
+                                }
+                                <button type="submit" className="btn btn-secondary" onClick={submitButtonHandler}>
+                                    {registration? 'Sign Up':'Sign In'}</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                }
+                {
+                   !login && <div className="accordion-wrapper">
                     {
                         auth && <form
                             // onAnimationEnd={formAnimationEnd}
@@ -105,6 +166,7 @@ function App() {
                         }
                     </ol>
                 </div>
+                }
             </div>
         
         </div>

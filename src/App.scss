@@ -42,18 +42,16 @@ body {
 	height: 200px;
 	left: 10%;
 	border-radius: 100%;
-	background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+	background: url("./img/subtle_carbon.jpg");
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 
-	//border: solid 4px;
-
 }
 
 .logo {
-	background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+	background: url("./img/subtle_carbon.jpg");
 	width: 97%;
 	height: 97%;
 	border-radius: 100%;
@@ -132,6 +130,7 @@ li {
 				font-size: 80%;
 				color: black;
 			}
+
 		}
 
 		.button-wrapper {
@@ -203,14 +202,16 @@ li {
 		position: relative;
 		.doneButton {
 			background-color: white;
-			width: 35px;
-			height: 35px;
+			width: 40px;
+			height: 40px;
 			border: none;
 			position: relative;
 			transition: 0.5s all;
-			&:nth-child(3){
-				width: 40px;
-				height: 35px;
+			&:nth-child(3) {
+				img {
+					width: 110%;
+					height: 90%;
+				}
 			}
 
 			&:hover {
@@ -239,21 +240,9 @@ li {
 	}
 
 }
-.list-item-form{
-	display: flex;
-	justify-content: start;
-	align-items: center;
+.form-fontsize{
 	font-size: 13px;
-	width: 100%;
-	button {
-		margin-left: 20px;
-		font-size: 13px;
-	}
 	input{
 		width: 400px;
 	}
-}
-.video-wrapper {
-	background: white;
-	position: relative
 }
