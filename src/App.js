@@ -4,6 +4,7 @@ import "animate.css"
 import logo from './img/Logo.svg'
 import Section from "./Section";
 import axios from "axios";
+import decode from 'jwt-decode'
 import {useEffect, useState} from "react";
 
 const localStorageData = JSON.parse(localStorage.getItem('profile'))
@@ -32,7 +33,19 @@ function App() {
     
     useEffect(() => {
         sectionGetAll()
-    }, [auth]);
+    }, [auth])
+    
+    useEffect(() => {
+        const token = auth?.token
+        console.log('Token', token)
+        if (token) {
+            const decodedToken = decode(token)
+            if (decodedToken.exp * 1000 < new Date().getTime()) {
+                localStorage.removeItem('profile');
+                setAuth(null)
+            }
+        }
+    })
     
     const taskMarkAsDone = (id) => {
         const selectedSection = list.find(el=> el.task.some(task=> task._id===id))
@@ -108,7 +121,7 @@ function App() {
                 </div>
                 <div className="logo-border">
                     <div className="logo">
-                        <a href="https://pasv.us/">
+                        <a href="https://pasv.us/" target="_blank">
                             <img src={logo} alt="logo" onAnimationEnd={logoHandler}
                                  className={logoClass}/>
                         </a>
