@@ -4,7 +4,8 @@ import deleteImg from './img/delete_4.svg'
 import editImg from './img/images.png'
 
 function Section(props) {
-    const {section, auth, API, sectionGetAll} = props
+    const {section, auth, API, sectionGetAll, taskMarkAsDone} = props
+    
     const [listItem, setListItem] = useState('')
     const [editTitle, setEditTitle] = useState(section.title)
     const [sectionOpen, setSectionOpen] = useState(false)
@@ -46,6 +47,7 @@ function Section(props) {
             .catch(err => console.log(err))
         
     }
+    
     return (
         <li className={sectionOpen ? "menu open" : "menu"}>
             <div className="title_wrapper">
@@ -97,6 +99,7 @@ function Section(props) {
                                                                     auth={auth}
                                                                     API={API}
                                                                     sectionGetAll={sectionGetAll}
+                                                                    taskMarkAsDone={taskMarkAsDone}
                     />)
                 }
             </ul>

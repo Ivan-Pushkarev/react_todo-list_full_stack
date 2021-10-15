@@ -32,7 +32,14 @@ function App() {
     
     useEffect(() => {
         sectionGetAll()
-    }, []);
+    }, [auth]);
+    
+    const taskMarkAsDone = (id) => {
+        const selectedSection = list.find(el=> el.task.some(task=> task._id===id))
+        const newTaskList = selectedSection.task.map(el=> el._id===id? {...el, done: !el.done}: el)
+        const newList= list.map(el=>el._id===selectedSection._id ? {...el, task:newTaskList }:el)
+        setList(newList)
+    }
     
     async function sectionGetAll() {
         try {
@@ -72,7 +79,7 @@ function App() {
         }
         API.post(url, data)
             .then((res) => {
-                console.log(res)
+                console.log(res.data)
                 setAuth(res.data)
                 setLogin(false)
                 setEmail('')
@@ -86,18 +93,12 @@ function App() {
     }
     
     const logoHandler = () => {
-        // setLogoClass("animate__flipInY animate__animated animate__slower")
-        // setTimeout(() => {
-        //     setLogoClass("animate__flipOutY animate__animated animate__slower animate")
-        // }, 20000)
+        setLogoClass("animate__flipInY animate__animated animate__slower")
+        setTimeout(() => {
+            setLogoClass("animate__flipOutY animate__animated animate__slower animate")
+        }, 20000)
     }
-    // const formAnimationEnd = () => {
-    //     if(formClass==="animate__fadeOutDown animate__animated mt-4") setFormClass("hidden")
-    // }
-    // localStorage.setItem('list', JSON.stringify(list))
-    // localStorage.setItem('list', JSON.stringify(list))
-    //
-    console.log("AUTH", auth)
+    
     return (
         <div className="container todo">
             <div className="header">
@@ -167,9 +168,7 @@ function App() {
                 {
                    !login && <div className="accordion-wrapper">
                     {
-                        auth && <form
-                            // onAnimationEnd={formAnimationEnd}
-                        >
+                        auth && <form>
                             <div className="mb-3">
                                 <label htmlFor="exampleInputEmail1" className="form-label">Введите название новой
                                     секции</label>
@@ -187,6 +186,7 @@ function App() {
                                                     API={API}
                                                     auth={auth}
                                                     sectionGetAll={sectionGetAll}
+                                                    taskMarkAsDone={taskMarkAsDone}
                             />)
                         }
                     </ol>

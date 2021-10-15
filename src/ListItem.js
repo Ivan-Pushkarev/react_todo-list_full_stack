@@ -6,15 +6,15 @@ import deleteImg
     from './img/transparent-solid-web-buttons-icon-trash-icon-delete-icon-5dcb353c1c3720.1008941715735985241156.png'
 
 function ListItem(props) {
-    const {item, auth, API, sectionGetAll} = props
+    const {item, auth, API, sectionGetAll, taskMarkAsDone} = props
+    
     const [videoInputClass, setVideoInputClass] = useState('hidden')
     const [editInputClass, setEditInputClass] = useState('hidden')
     const [videoLink, setVideoLink] = useState('')
     const [editTask, setEditTask] = useState(item.description)
+    
     const doneButtonHandler = () => {
-        // const newSectionContent = section.content.map(el => el.id === item.id ? {...el, done: !el.done} : el)
-        // const newList = list.map(el => el.title === section.title ? {...el, content: newSectionContent} : el)
-        // setList(newList)
+        taskMarkAsDone(item._id)
     }
     
     const deleteItemHandler = () => {
@@ -61,13 +61,13 @@ function ListItem(props) {
             setEditInputClass('hidden')
     }
     
-    console.log('VIDEO',item.video)
+   //console.log('VIDEO',item.video)
     return (
         <li className={item.done && "done"}>
             <div className="innerItem">
                 <span>
                     {item.description} {' '}
-                    {item.video && <a href={item.video} target="_blank">Смотреть видео</a>}
+                    {item.video && <a href={item.video} target="_blank">{auth? item.video: 'Смотреть видео'}</a>}
                 </span>
                 <div className="button-group">
                     {
