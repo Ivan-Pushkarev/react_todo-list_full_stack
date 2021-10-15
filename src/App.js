@@ -6,24 +6,29 @@ import Section from "./Section";
 import axios from "axios";
 import {useEffect, useState} from "react";
 
-// const initialList =JSON.parse(localStorage.getItem('list'))? JSON.parse(localStorage.getItem('list')): baseList
-// const editorMode = JSON.parse(localStorage.getItem('editorMode')) ? JSON.parse(localStorage.getItem('editorMode')): false
+const localStorageData = JSON.parse(localStorage.getItem('profile'))
 
 function App() {
     
     
     const [list, setList] = useState([])
-    const [auth, setAuth] = useState(true)
-    const [login, setLogin] = useState(true)
-    const [registration, setRegistration] = useState(true)
+    const [auth, setAuth] = useState(localStorageData || null)
+    const [login, setLogin] = useState(false)
+    const [registration, setRegistration] = useState(false)
     const [logoClass, setLogoClass] = useState("animate__flipOutY animate__animated animate__slower")
     const [newSection, setNewSection] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [repeat, setRepeat] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     
     
     const API = axios.create({baseURL: 'http://localhost:8000'})
+    API.interceptors.request.use((req) => {
+        if (localStorage.getItem('profile')) {
+            req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+        }
+        return req;
+    });
     
     useEffect(() => {
         sectionGetAll()
@@ -46,19 +51,34 @@ function App() {
                 sectionGetAll()
             })
             .catch(err => console.log(err))
-        
     }
     
-    const submitButtonHandler = () => {
+    const loginLogoutHandler = () => {
+        if(auth) {
+            localStorage.removeItem('profile');
+            setAuth(null)
+        } else{
+            setLogin(prev=>!prev)
+        }
+    }
+    
+    const submitButtonHandler = (e) => {
+        e.preventDefault()
         const data= { email, password}
         let url = '/user/signIn'
         if(registration) {
-            data.checkPassword = repeat
+            data.confirmPassword = confirmPassword
             url = '/user/signUp'
         }
         API.post(url, data)
             .then((res) => {
-                setAuth(res)
+                console.log(res)
+                setAuth(res.data)
+                setLogin(false)
+                setEmail('')
+                setPassword('')
+                setConfirmPassword('')
+                localStorage.setItem('profile', JSON.stringify({...res.data}))
             })
             .catch(err => console.log(err))
         
@@ -77,7 +97,7 @@ function App() {
     // localStorage.setItem('list', JSON.stringify(list))
     // localStorage.setItem('list', JSON.stringify(list))
     //
-    console.log(list)
+    console.log("AUTH", auth)
     return (
         <div className="container todo">
             <div className="header">
@@ -97,15 +117,19 @@ function App() {
             <div className="todo-content">
                 <h2>{!login? 'Структура курса React. Секции и лекции:': registration? 'Форма регистрации': 'Форма' +
                     ' авторизации'}</h2>
-                <span className="edit-section" onClick={()=> setLogin(prev=>!prev)}>
-                    {auth? 'Выйти':'Логин / Регистрация'}</span>
+                <div className="edit-section">
+                    {
+                        auth && <div>Пользователь: {auth?.result.email}</div>
+                    }
+                <div className="login-logout" onClick={loginLogoutHandler}>{auth? 'Выйти':
+                    login? 'На главную':'Логин / Регистрация'}</div>
+                </div>
                 {
                     login && <div className="row mt-5">
                         <div className="offset-3 col-6">
-                            <h6 className="pb-1">
-                                {registration? 'Уже имеете аккаунт на нашем портале? Тогда перейдите в форму логина'
-                                    : 'Еще нет аккаунта? Тогда перейдите в форму регистрации'}</h6>
-                            <button className="btn btn-secondary btn-sm mb-3" onClick={()=>setRegistration(prev=>!prev)}>Перейти</button>
+                            <h6 className="pb-4 " onClick={()=>setRegistration(prev=>!prev)}>
+                                {registration? 'Уже имеете аккаунт на нашем портале? SignIn'
+                                    : 'Еще нет аккаунта на нашем портале? SignUp'}</h6>
                             <form>
                                 <div className="row mb-3">
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
@@ -126,7 +150,8 @@ function App() {
                                         <label htmlFor="checkPassword" className="col-sm-2 col-form-label">Repeat Password</label>
                                         <div className="col-sm-10">
                                             <input type="password" className="form-control" id="checkPassword"
-                                                   value={repeat} onChange={(e)=>setRepeat(e.target.value)}/>
+                                                   value={confirmPassword}
+                                                   onChange={(e)=>setConfirmPassword(e.target.value)}/>
                                         </div>
                                     </div>
                                 }

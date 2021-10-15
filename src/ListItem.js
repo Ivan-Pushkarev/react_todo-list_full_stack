@@ -24,25 +24,28 @@ function ListItem(props) {
                 sectionGetAll()
             })
             .catch(err => console.log(err))
-        
-        
     }
-    const addVideoLink = () => {
-        API.patch(`/task/${item._id}`, {video: videoLink})
+    
+    const taskEditHandler = (inputType) => {
+        API.patch(`/task/${item._id}`, {video: videoLink, description: editTask})
             .then(() => {
-                setVideoLink('')
-                setVideoInputClass('hidden')
+                if (inputType === 'video') {
+                    setVideoLink('')
+                    setVideoInputClass('hidden')
+                } else {
+                    setEditTask('')
+                    setEditInputClass('hidden')
+                }
                 sectionGetAll()
             })
             .catch(err => console.log(err))
-        
     }
     
     function inputClassHandler(name) {
         if (name === 'video') {
             if (videoInputClass === 'hidden') setVideoInputClass("video-input animate__animated animate__fadeInRight")
             else setVideoInputClass("video-input animate__animated animate__fadeOutRight")
-        } else{
+        } else {
             if (editInputClass === 'hidden') setEditInputClass("video-input animate__animated animate__fadeInRight")
             else setEditInputClass("video-input animate__animated animate__fadeOutRight")
         }
@@ -52,11 +55,13 @@ function ListItem(props) {
         if (videoInputClass === "video-input animate__animated animate__fadeOutRight")
             setVideoInputClass('hidden')
     }
+    
     function editAnimationEndHandler() {
         if (editInputClass === "video-input animate__animated animate__fadeOutRight")
             setEditInputClass('hidden')
     }
     
+    console.log('VIDEO',item.video)
     return (
         <li className={item.done && "done"}>
             <div className="innerItem">
@@ -84,7 +89,7 @@ function ListItem(props) {
                                    value={editTask}
                                    onChange={(e) => setEditTask(e.target.value)}/>
                             <button className={editInputClass !== 'hidden' ? "btn btn-secondary btn-sm" : "hidden"}
-                                    onClick={addVideoLink}>ok
+                                    onClick={() => taskEditHandler('description')}>ok
                             </button>
                         </div>
                     }
@@ -99,7 +104,7 @@ function ListItem(props) {
                                    value={videoLink}
                                    onChange={(e) => setVideoLink(e.target.value)}/>
                             <button className={videoInputClass !== 'hidden' ? "btn btn-danger btn-sm" : "hidden"}
-                                    onClick={addVideoLink}>ok
+                                    onClick={() => taskEditHandler('video')}>ok
                             </button>
                         </div>
                     }
