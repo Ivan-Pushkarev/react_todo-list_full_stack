@@ -5,9 +5,11 @@ import logo from './img/Logo.svg'
 import Section from "./Section";
 import axios from "axios";
 import decode from 'jwt-decode'
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 const localStorageData = JSON.parse(localStorage.getItem('profile'))
+const localURL = 'http://localhost:8000'
+//const remoteURL = 'https://pasv-todo.herokuapp.com'
 
 function App() {
     
@@ -23,7 +25,7 @@ function App() {
     const [confirmPassword, setConfirmPassword] = useState('')
     
     
-    const API = axios.create({baseURL: 'http://localhost:8000'})
+    const API = axios.create({baseURL: localURL})
     API.interceptors.request.use((req) => {
         if (localStorage.getItem('profile')) {
             req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
@@ -31,15 +33,26 @@ function App() {
         return req;
     });
     
-    useEffect(() => {
-        sectionGetAll()
-    }, [auth])
+    const sectionGetAll = useCallback(async ()=>{
+        try {
+            const result = await API.get('/section')
+            setList(result.data)
+        } catch (err) {
+            console.log('Tasks get all error')
+        }
+        
+    }, [])
     
     useEffect(() => {
+        sectionGetAll()
+    }, [auth, sectionGetAll])
+    
+    //TODO dependencies for jwt
+    useEffect(() => {
         const token = auth?.token
-        console.log('Token', token)
         if (token) {
             const decodedToken = decode(token)
+            console.log('Time', decodedToken.exp)
             if (decodedToken.exp * 1000 < new Date().getTime()) {
                 localStorage.removeItem('profile');
                 setAuth(null)
@@ -54,14 +67,15 @@ function App() {
         setList(newList)
     }
     
-    async function sectionGetAll() {
-        try {
-            const result = await API.get('/section')
-            setList(result.data)
-        } catch (err) {
-            console.log('Tasks get all error')
-        }
-    }
+   
+    // async function sectionGetAll() {
+    //     try {
+    //         const result = await API.get('/section')
+    //         setList(result.data)
+    //     } catch (err) {
+    //         console.log('Tasks get all error')
+    //     }
+    // }
    
     const formSubmitHandler = (e) => {
         e.preventDefault()
@@ -101,10 +115,8 @@ function App() {
                 localStorage.setItem('profile', JSON.stringify({...res.data}))
             })
             .catch(err => console.log(err))
-        
-    
     }
-    
+    //TODO server response message
     const logoHandler = () => {
         setLogoClass("animate__flipInY animate__animated animate__slower")
         setTimeout(() => {
@@ -121,7 +133,7 @@ function App() {
                 </div>
                 <div className="logo-border">
                     <div className="logo">
-                        <a href="https://pasv.us/" target="_blank">
+                         <a href="https://pasv.us/" target="_blank" rel="noopener noreferrer">
                             <img src={logo} alt="logo" onAnimationEnd={logoHandler}
                                  className={logoClass}/>
                         </a>

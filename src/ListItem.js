@@ -67,7 +67,7 @@ function ListItem(props) {
             <div className="innerItem">
                 <span>
                     {item.description} {' '}
-                    {item.video && <a href={item.video} target="_blank">{auth? item.video: 'Смотреть видео'}</a>}
+                    {item.video && <a href={item.video} target="_blank" rel="noopener noreferrer">{auth? item.video: 'Смотреть видео'}</a>}
                 </span>
                 <div className="button-group">
                     {
