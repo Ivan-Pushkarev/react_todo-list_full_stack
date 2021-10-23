@@ -11,11 +11,9 @@ h6{
 	cursor: pointer;
 }
 body {
-
 	color: black;
 	font-size: 13px;
 	background: url(img/bright-background-with-dots_1055-3132.jpg) center center/cover no-repeat fixed;
-
 }
 
 .todo {
@@ -23,12 +21,10 @@ body {
 	padding: 60px 0 40px;
 	min-height: 100vh;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-
 }
-
 .header {
 	color: white;
-	background: url("http://drivepremium.com/wp-content/themes/OpenDoor1.4/images/subtle_carbon.jpg");
+	background: url("./img/subtle_carbon.jpg");
 	width: 100%;
 	padding: 15px 0 15px;
 	display: flex;
@@ -228,7 +224,7 @@ li {
 		}
 
 		.done {
-			opacity: 30%;
+			opacity: 0.3;
 		}
 
 	}
