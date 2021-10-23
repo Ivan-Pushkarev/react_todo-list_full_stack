@@ -214,7 +214,7 @@ li {
   width: 100%;
 }
 .innerItem .button-group .done {
-  opacity: 30%;
+  opacity: 0.3;
 }
 
 .done .innerItem span {
