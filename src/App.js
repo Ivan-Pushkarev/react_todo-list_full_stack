@@ -5,7 +5,7 @@ import logo from './img/Logo.svg'
 import Section from "./Section";
 import axios from "axios";
 import decode from 'jwt-decode'
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 const localStorageData = JSON.parse(localStorage.getItem('profile'))
 //const localURL = 'http://localhost:8000'
@@ -25,7 +25,11 @@ function App() {
     const [authError, setAuthError] = useState('')
     
     
+    // const API = useMemo(()=>{
+    //     axios.create({baseURL: remoteURL})
+    // },[])
     const API = axios.create({baseURL: remoteURL})
+
     API.interceptors.request.use((req) => {
         if (localStorage.getItem('profile')) {
             const decodedToken = decode(auth?.token)
@@ -36,19 +40,19 @@ function App() {
         }
         return req;
     });
-    
-    const sectionGetAll = async () =>{
+
+    const sectionGetAll = useCallback(async () =>{
         try {
-            const result = await API.get('/section')
+            const result = await axios.get('https://pasv-todo.herokuapp.com/section')
             setList(result.data)
         } catch (err) {
             console.log('Tasks get all error')
         }
-    }
-    
+    },[])
+
     useEffect(() => {
-        sectionGetAll()
-    }, [])
+        sectionGetAll().then(()=>console.log('Section get All'))
+    }, [sectionGetAll])
     
     const taskMarkAsDone = (id) => {
         const selectedSection = list.find(el=> el.task.some(task=> task._id===id))
@@ -62,7 +66,7 @@ function App() {
         API.post('/section', {title: newSection})
             .then(() => {
                 setNewSection('')
-                sectionGetAll()
+                sectionGetAll().then(()=>console.log('Section get All'))
             })
             .catch(err => console.log(err))
     }
