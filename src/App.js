@@ -5,14 +5,13 @@ import logo from './img/Logo.svg'
 import Section from "./Section";
 import axios from "axios";
 import decode from 'jwt-decode'
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 const localStorageData = JSON.parse(localStorage.getItem('profile'))
-const localURL = 'http://localhost:8000'
-//const remoteURL = 'https://pasv-todo.herokuapp.com'
+//const localURL = 'http://localhost:8000'
+const remoteURL = 'https://pasv-todo.herokuapp.com'
 
 function App() {
-    
     
     const [list, setList] = useState([])
     const [auth, setAuth] = useState(localStorageData || null)
@@ -23,42 +22,33 @@ function App() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [authError, setAuthError] = useState('')
     
     
-    const API = axios.create({baseURL: localURL})
+    const API = axios.create({baseURL: remoteURL})
     API.interceptors.request.use((req) => {
         if (localStorage.getItem('profile')) {
-            req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+            const decodedToken = decode(auth?.token)
+            if (decodedToken.exp * 1000 < new Date().getTime()) {
+                localStorage.removeItem('profile');
+                setAuth(null)}
+            else req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
         }
         return req;
     });
     
-    const sectionGetAll = useCallback(async ()=>{
+    const sectionGetAll = async () =>{
         try {
             const result = await API.get('/section')
             setList(result.data)
         } catch (err) {
             console.log('Tasks get all error')
         }
-        
-    }, [])
+    }
     
     useEffect(() => {
         sectionGetAll()
-    }, [auth, sectionGetAll])
-    
-    //TODO dependencies for jwt
-    useEffect(() => {
-        const token = auth?.token
-        if (token) {
-            const decodedToken = decode(token)
-            console.log('Time', decodedToken.exp)
-            if (decodedToken.exp * 1000 < new Date().getTime()) {
-                localStorage.removeItem('profile');
-                setAuth(null)
-            }
-        }
-    })
+    }, [])
     
     const taskMarkAsDone = (id) => {
         const selectedSection = list.find(el=> el.task.some(task=> task._id===id))
@@ -66,16 +56,6 @@ function App() {
         const newList= list.map(el=>el._id===selectedSection._id ? {...el, task:newTaskList }:el)
         setList(newList)
     }
-    
-   
-    // async function sectionGetAll() {
-    //     try {
-    //         const result = await API.get('/section')
-    //         setList(result.data)
-    //     } catch (err) {
-    //         console.log('Tasks get all error')
-    //     }
-    // }
    
     const formSubmitHandler = (e) => {
         e.preventDefault()
@@ -106,17 +86,20 @@ function App() {
         }
         API.post(url, data)
             .then((res) => {
-                console.log(res.data)
                 setAuth(res.data)
                 setLogin(false)
                 setEmail('')
                 setPassword('')
                 setConfirmPassword('')
+                setAuthError('')
                 localStorage.setItem('profile', JSON.stringify({...res.data}))
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                setAuthError(err.response.data)
+            })
+        
     }
-    //TODO server response message
+    
     const logoHandler = () => {
         setLogoClass("animate__flipInY animate__animated animate__slower")
         setTimeout(() => {
@@ -153,7 +136,7 @@ function App() {
                 {
                     login && <div className="row mt-5">
                         <div className="offset-3 col-6">
-                            <h6 className="pb-4 " onClick={()=>setRegistration(prev=>!prev)}>
+                            <h6 className="pb-4 " onClick={()=>{setRegistration(prev=>!prev); setAuthError('')}}>
                                 {registration? 'Уже имеете аккаунт на нашем портале? SignIn'
                                     : 'Еще нет аккаунта на нашем портале? SignUp'}</h6>
                             <form>
@@ -183,6 +166,7 @@ function App() {
                                 }
                                 <button type="submit" className="btn btn-secondary" onClick={submitButtonHandler}>
                                     {registration? 'Sign Up':'Sign In'}</button>
+                                <div className="auth-error">{authError}</div>
                             </form>
                         </div>
                         
