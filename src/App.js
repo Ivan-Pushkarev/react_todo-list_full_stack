@@ -8,7 +8,7 @@ import decode from 'jwt-decode'
 import {useCallback, useEffect, useState} from "react";
 
 const localStorageData = JSON.parse(localStorage.getItem('profile'))
-//const localURL = 'http://localhost:8000'
+const localURL = 'http://localhost:8000'
 const remoteURL = 'https://pasv-todo.herokuapp.com'
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
     // const API = useMemo(()=>{
     //     axios.create({baseURL: remoteURL})
     // },[])
-    const API = axios.create({baseURL: remoteURL})
+    const API = axios.create({baseURL: localURL})
 
     API.interceptors.request.use((req) => {
         if (localStorage.getItem('profile')) {
@@ -43,7 +43,7 @@ function App() {
 
     const sectionGetAll = useCallback(async () =>{
         try {
-            const result = await axios.get('https://pasv-todo.herokuapp.com/section')
+            const result = await API.get('/section')
             setList(result.data)
         } catch (err) {
             console.log('Tasks get all error')
