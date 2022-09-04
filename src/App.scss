@@ -74,20 +74,24 @@ body {
 	position: relative;
 }
 
+.login-logout{
+	text-align: right;
+	text-decoration: none;
+	transition: 0.5s all;
+	font-weight: 500;
+	font-size: 14px;
+	&:hover {
+		font-size: 16px;
+		cursor: pointer;
+	}
+}
+
 .edit-section {
 	text-align: right;
 	position: absolute;
 	right: 20px;
 	top:20px;
-	.login-logout{
-		transition: 0.5s all;
-		font-weight: 500;
-		font-size: 14px;
-		&:hover {
-			font-size: 16px;
-			cursor: pointer;
-		}
-	}
+
 }
 
 .accordion-wrapper {

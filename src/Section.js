@@ -2,57 +2,66 @@ import React, {useState} from 'react';
 import ListItem from "./ListItem";
 import deleteImg from './img/delete_4.svg'
 import editImg from './img/images.png'
+import {useMutation} from "@apollo/client";
+import {CREATE_TASK_MUTATION, DELETE_SECTION_BY_ID_MUTATION, UPDATE_SECTION_MUTATION} from "./graphql/mutations";
+import {GET_SECTIONS} from "./graphql/queries";
 
 function Section(props) {
-    const {section, auth, API, sectionGetAll, taskMarkAsDone} = props
-    
+    const {section, auth, sectionGetAll, taskMarkAsDone} = props
     const [listItem, setListItem] = useState('')
     const [editTitle, setEditTitle] = useState(section.title)
     const [sectionOpen, setSectionOpen] = useState(false)
     const [sectionEdit, setSectionEdit] = useState(false)
-    
+
+
+    const [deleteSection] = useMutation( DELETE_SECTION_BY_ID_MUTATION, {
+        refetchQueries: [{query: GET_SECTIONS}]
+    })
+
+    const [updateSection] = useMutation( UPDATE_SECTION_MUTATION, {
+        refetchQueries: [{query: GET_SECTIONS}]
+    })
+
+    const [createTask] = useMutation( CREATE_TASK_MUTATION, {
+        variables: {
+            input: { section: section._id, description: listItem }
+        },
+        refetchQueries: [{query: GET_SECTIONS}]
+    })
+
+
     const openSection = () => {
         setSectionOpen(prev => !prev)
     }
    
     const deleteSectionHandler = (id) => {
-        API.delete(`/section/${id}`)
-            .then((res) => {
-                console.log(res)
-                sectionGetAll()
-            })
-            .catch(err => console.log(err))
+        deleteSection({
+            variables: { id },
+        })
     }
     
-    const addListItemHandler = (e) => {
+    const addTaskHandler = async (e) => {
         e.preventDefault()
-        const newTask = {
-            section: section._id,
-            description: listItem
-        }
-        API.post('/task', newTask)
-            .then(() => {
-                setListItem('')
-                sectionGetAll()
-            })
-            .catch(err => console.log(err))
+        await createTask()
+        setListItem('')
     }
     
-    const updateTitleHandler = (id) => {
-        API.patch(`/section/${id}`, {title: editTitle})
-            .then(() => {
-                setSectionEdit(false)
-                sectionGetAll()
-            })
-            .catch(err => console.log(err))
-        
+    const updateTitleHandler = async (id) => {
+       await updateSection({
+            variables: {
+                input: {
+                    id, title: editTitle
+                }
+            }
+        })
+        setSectionEdit(false)
     }
     
     return (
         <li className={sectionOpen ? "menu open" : "menu"}>
             <div className="title_wrapper">
                 <span className="title edit" onClick={openSection}>{section.title}</span>
-                <div className={auth ? "button-wrapper" : "button-wrapper hidden"}>
+                <div className={true ? "button-wrapper" : "button-wrapper hidden"}>
                     <button onClick={()=>setSectionEdit(prev => !prev)}>
                         <img src={editImg} alt="delete"/>
                     </button>
@@ -62,7 +71,7 @@ function Section(props) {
                 </div>
             </div>
             {
-                auth && sectionEdit &&
+                sectionEdit &&
                 <div className="bg-light">
                     <div className="mb-3 d-inline-block form-fontsize" >
                         <label htmlFor="title" className="form-label">
@@ -77,7 +86,6 @@ function Section(props) {
                 </div>
             }
             {
-                auth &&
                 <form className={sectionOpen ? 'form-fontsize ' : 'hidden'}>
                     <div className="mb-3 d-inline-block">
                         <label htmlFor="task" className="form-label ">
@@ -88,18 +96,20 @@ function Section(props) {
                                onChange={(e) => setListItem(e.target.value)}/>
                     </div>
                     <button className="btn btn-secondary ms-2"
-                            onClick={addListItemHandler}>Добавить</button>
+                            disabled={!listItem}
+                            onClick={addTaskHandler}>Добавить</button>
                 </form>
             }
             <ul className="animate__animated animate__fadeIn animate__slow">
                 
                 {
-                    sectionOpen && section.task.map(el => <ListItem key={el._id}
-                                                                    item={el}
-                                                                    auth={auth}
-                                                                    API={API}
-                                                                    sectionGetAll={sectionGetAll}
-                                                                    taskMarkAsDone={taskMarkAsDone}
+                    sectionOpen && section.task.map(el =>
+                        <ListItem
+                            key={el._id}
+                            item={el}
+                            auth={auth}
+                            sectionGetAll={sectionGetAll}
+                            taskMarkAsDone={taskMarkAsDone}
                     />)
                 }
             </ul>

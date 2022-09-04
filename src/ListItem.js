@@ -4,6 +4,9 @@ import taskEditImg from './img/images.png'
 import youTubeImg from './img/youtube-logo-png-3573.png'
 import deleteImg
     from './img/transparent-solid-web-buttons-icon-trash-icon-delete-icon-5dcb353c1c3720.1008941715735985241156.png'
+import {useMutation} from "@apollo/client";
+import {DELETE_TASK_BY_ID_MUTATION, UPDATE_TASK_BY_ID_MUTATION} from "./graphql/mutations";
+import {GET_SECTIONS} from "./graphql/queries";
 
 function ListItem(props) {
     const {item, auth, API, sectionGetAll, taskMarkAsDone} = props
@@ -12,22 +15,24 @@ function ListItem(props) {
     const [editInputClass, setEditInputClass] = useState('hidden')
     const [videoLink, setVideoLink] = useState('')
     const [editTask, setEditTask] = useState(item.description)
-    
+
+    const [deleteTask] = useMutation( DELETE_TASK_BY_ID_MUTATION, {
+        variables: {id: item._id},
+        refetchQueries: [{query: GET_SECTIONS}]
+    })
+
+    const [updateTask] = useMutation( UPDATE_TASK_BY_ID_MUTATION, {
+        variables: {input: {id: item._id, video: videoLink, description: editTask}},
+        refetchQueries: [{query: GET_SECTIONS}]
+    })
+
     const doneButtonHandler = () => {
         taskMarkAsDone(item._id)
     }
     
-    const deleteItemHandler = () => {
-        API.delete(`/task/${item._id}`)
-            .then(() => {
-                setVideoLink('')
-                sectionGetAll()
-            })
-            .catch(err => console.log(err))
-    }
-    
     const taskEditHandler = (inputType) => {
-        API.patch(`/task/${item._id}`, {video: videoLink, description: editTask})
+        // API.patch(`/task/${item._id}`, {video: videoLink, description: editTask})
+        updateTask()
             .then(() => {
                 if (inputType === 'video') {
                     setVideoLink('')
@@ -79,7 +84,7 @@ function ListItem(props) {
                     }
                     
                     {
-                        auth && <div>
+                         <div>
                             <button className={item.done ? "doneButton done" : "doneButton"}
                                     onClick={() => inputClassHandler('edit')}>
                                 <img src={taskEditImg} alt="task edit button"/>
@@ -94,7 +99,7 @@ function ListItem(props) {
                         </div>
                     }
                     {
-                        auth && <div>
+                        <div>
                             <button className={item.done ? "doneButton done" : "doneButton"}
                                     onClick={() => inputClassHandler('video')}>
                                 <img src={youTubeImg} alt="you tube button"/>
@@ -109,12 +114,11 @@ function ListItem(props) {
                         </div>
                     }
                     {
-                        auth && <button className={item.done ? "doneButton done" : "doneButton"}
-                                        onClick={deleteItemHandler}>
+                         <button className={item.done ? "doneButton done" : "doneButton"}
+                                        onClick={deleteTask}>
                             <img src={deleteImg} alt="delete task button"/>
                         </button>
                     }
-                
                 
                 </div>
             </div>

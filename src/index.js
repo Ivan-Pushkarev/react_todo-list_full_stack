@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {ApolloClient, createHttpLink, InMemoryCache, ApolloProvider} from "@apollo/client";
+import {BrowserRouter} from "react-router-dom";
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:8000'
+    uri: 'http://localhost:8080'
 })
 const client = new ApolloClient({
     link: httpLink,
@@ -15,7 +16,9 @@ const client = new ApolloClient({
 ReactDOM.render(
     <React.StrictMode>
         <ApolloProvider client={client}>
-            <App/>
+            <BrowserRouter>
+                <App/>
+            </BrowserRouter>
         </ApolloProvider>
     </React.StrictMode>,
     document.getElementById('root')
