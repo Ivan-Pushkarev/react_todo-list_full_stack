@@ -47,3 +47,28 @@ export const UPDATE_TASK_BY_ID_MUTATION = gql`
         }
     }
 `
+export const SIGNUP_MUTATION = gql`
+    mutation Signup($password: String!, $email: String!) {
+        signup(password: $password, email: $email) {
+            user {
+                email
+                _id
+            }
+        }
+    }
+`
+export const LOGIN_MUTATION = gql`
+    mutation Login($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+            user {
+                _id
+                email
+            }
+        }
+    }
+`
+export const LOGOUT_MUTATION = gql`
+    mutation Logout {
+        logout
+    }
+`

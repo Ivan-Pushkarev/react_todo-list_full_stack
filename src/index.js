@@ -6,11 +6,12 @@ import {ApolloClient, createHttpLink, InMemoryCache, ApolloProvider} from "@apol
 import {BrowserRouter} from "react-router-dom";
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:8080'
+    uri: 'http://localhost:8080/graphql',
+    credentials: 'include'
 })
 const client = new ApolloClient({
     link: httpLink,
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
 })
 
 ReactDOM.render(
