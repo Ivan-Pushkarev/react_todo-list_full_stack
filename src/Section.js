@@ -7,7 +7,7 @@ import {CREATE_TASK_MUTATION, DELETE_SECTION_BY_ID_MUTATION, UPDATE_SECTION_MUTA
 import {GET_SECTIONS} from "./graphql/queries";
 
 function Section(props) {
-    const {section, auth, sectionGetAll, taskMarkAsDone} = props
+    const {section, isLoggedIn, sectionGetAll, taskMarkAsDone} = props
     const [listItem, setListItem] = useState('')
     const [editTitle, setEditTitle] = useState(section.title)
     const [sectionOpen, setSectionOpen] = useState(false)
@@ -61,7 +61,7 @@ function Section(props) {
         <li className={sectionOpen ? "menu open" : "menu"}>
             <div className="title_wrapper">
                 <span className="title edit" onClick={openSection}>{section.title}</span>
-                <div className={true ? "button-wrapper" : "button-wrapper hidden"}>
+                <div className={isLoggedIn ? "button-wrapper" : "button-wrapper hidden"}>
                     <button onClick={()=>setSectionEdit(prev => !prev)}>
                         <img src={editImg} alt="delete"/>
                     </button>
@@ -85,7 +85,7 @@ function Section(props) {
                             onClick={()=>updateTitleHandler(section._id)}>Обновить</button>
                 </div>
             }
-            {
+            { isLoggedIn &&
                 <form className={sectionOpen ? 'form-fontsize ' : 'hidden'}>
                     <div className="mb-3 d-inline-block">
                         <label htmlFor="task" className="form-label ">
@@ -107,7 +107,7 @@ function Section(props) {
                         <ListItem
                             key={el._id}
                             item={el}
-                            auth={auth}
+                            isLoggedIn={isLoggedIn}
                             sectionGetAll={sectionGetAll}
                             taskMarkAsDone={taskMarkAsDone}
                     />)

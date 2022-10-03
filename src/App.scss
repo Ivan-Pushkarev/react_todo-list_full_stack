@@ -21,6 +21,8 @@ body {
 	padding: 60px 0 40px;
 	min-height: 100vh;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+
+
 }
 .header {
 	color: white;
@@ -91,6 +93,7 @@ body {
 	position: absolute;
 	right: 20px;
 	top:20px;
+	z-index: 10;
 
 }
 

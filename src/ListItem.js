@@ -9,7 +9,7 @@ import {DELETE_TASK_BY_ID_MUTATION, UPDATE_TASK_BY_ID_MUTATION} from "./graphql/
 import {GET_SECTIONS} from "./graphql/queries";
 
 function ListItem(props) {
-    const {item, auth, API, sectionGetAll, taskMarkAsDone} = props
+    const {item, isLoggedIn, sectionGetAll, taskMarkAsDone} = props
     
     const [videoInputClass, setVideoInputClass] = useState('hidden')
     const [editInputClass, setEditInputClass] = useState('hidden')
@@ -72,18 +72,17 @@ function ListItem(props) {
             <div className="innerItem">
                 <span>
                     {item.description} {' '}
-                    {item.video && <a href={item.video} target="_blank" rel="noopener noreferrer">{auth? item.video: 'Смотреть видео'}</a>}
+                    {item.video && <a href={item.video} target="_blank" rel="noopener noreferrer">{isLoggedIn? item.video: 'Смотреть видео'}</a>}
                 </span>
                 <div className="button-group">
                     {
-                        
-                        !auth &&
+                        !isLoggedIn &&
                         <button className={item.done ? "doneButton done" : "doneButton"} onClick={doneButtonHandler}>
                             <img src={doneImg} alt="doneButton"/>
                         </button>
                     }
                     
-                    {
+                    { isLoggedIn &&
                          <div>
                             <button className={item.done ? "doneButton done" : "doneButton"}
                                     onClick={() => inputClassHandler('edit')}>
@@ -98,7 +97,7 @@ function ListItem(props) {
                             </button>
                         </div>
                     }
-                    {
+                    { isLoggedIn &&
                         <div>
                             <button className={item.done ? "doneButton done" : "doneButton"}
                                     onClick={() => inputClassHandler('video')}>
@@ -113,7 +112,7 @@ function ListItem(props) {
                             </button>
                         </div>
                     }
-                    {
+                    { isLoggedIn &&
                          <button className={item.done ? "doneButton done" : "doneButton"}
                                         onClick={deleteTask}>
                             <img src={deleteImg} alt="delete task button"/>

@@ -1,18 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import Section from "../Section";
 import {useMutation, useQuery} from "@apollo/client";
-import {GET_SECTIONS} from "../graphql/queries";
-import {CREATE_SECTION_MUTATION} from "../graphql/mutations";
-
-const localStorageData = JSON.parse(localStorage.getItem('profile'))
-const localURL = 'http://localhost:8000'
-const remoteURL = 'https://pasv-todo.herokuapp.com'
-
+import {CURRENT_USER_QUERY, GET_SECTIONS} from "../graphql/queries";
+import {CREATE_SECTION_MUTATION, LOGOUT_MUTATION} from "../graphql/mutations";
 
 function HomePage(props) {
-
-    const [list, setList] = useState([])
-    const [auth, setAuth] = useState(localStorageData || null)
     const [newSection, setNewSection] = useState('')
 
     const {data, loading, error} = useQuery(GET_SECTIONS)
@@ -22,19 +14,16 @@ function HomePage(props) {
         refetchQueries: [{query: GET_SECTIONS}]
     })
 
-    useEffect(() => {
-        if (data) setList(data.sectionsAll)
-    }, [data])
+    // const {error: userError, data: auth} = useQuery(CURRENT_USER_QUERY);
 
-    if (loading) return <div>Loading...</div>
-    if (error) return <div>Something went wrong...</div>
-
-    const taskMarkAsDone = (id) => {
-        const selectedSection = list.find(el => el.task.some(task => task._id === id))
-        const newTaskList = selectedSection.task.map(el => el._id === id ? {...el, done: !el.done} : el)
-        const newList = list.map(el => el._id === selectedSection._id ? {...el, task: newTaskList} : el)
-        setList(newList)
-    }
+    const [logout] = useMutation(LOGOUT_MUTATION,
+        {
+            update: (cache) => cache.writeQuery({
+                query: CURRENT_USER_QUERY,
+                data: {currentUser: null},
+            }),
+        },
+    );
 
     const formSubmitHandler = async (e) => {
         e.preventDefault()
@@ -42,22 +31,34 @@ function HomePage(props) {
         setNewSection('')
     }
 
-    console.log(list)
+    // if (loading) return <div>Loading</div>;
+    // if (userError) return <pre>Error: {JSON.stringify(userError, null, 2)}</pre>;
+    const auth = false
+    const isLoggedIn = !!auth?.currentUser;
+    console.log('Logged User' , auth?.currentUser )
+
+    // if (loading) return <div>Loading...</div>
+    // if (error) return <div>Something went wrong...</div>
+
 
     return (
         <>
             <div className="todo-content">
                 <h2> Структура курса React. Секции и лекции:</h2>
                 <div className="edit-section">
-                    {/*{*/}
-                    {/*    auth && <div>Пользователь: {auth?.result.email}</div>*/}
-                    {/*}*/}
+                    {
+                        isLoggedIn &&
+                        <div>
+                            <div>Пользователь: {auth.currentUser.email}</div>
+                            <button onClick={()=>logout()}>Выйти</button>
+                        </div>
+                    }
 
                 </div>
             </div>
             <div className="accordion-wrapper">
                 {
-                    //  auth &&
+                    isLoggedIn &&
                     <form>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Введите название новой
@@ -71,12 +72,11 @@ function HomePage(props) {
                 }
                 <ol id="list" className="animate__fadeIn animate__animated animate__slower mt-4">
                     {
-                        list.map(el =>
+                        data?.sectionsAll &&  data.sectionsAll.map(el =>
                             <Section
                                 key={el._id}
                                 section={el}
-                                auth={auth}
-                                taskMarkAsDone={taskMarkAsDone}
+                                isLoggedIn={isLoggedIn}
                             />)
                     }
                 </ol>
