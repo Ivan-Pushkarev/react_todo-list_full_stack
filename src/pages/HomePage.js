@@ -4,10 +4,10 @@ import {useMutation, useQuery} from "@apollo/client";
 import {CURRENT_USER_QUERY, GET_SECTIONS} from "../graphql/queries";
 import {CREATE_SECTION_MUTATION, LOGOUT_MUTATION} from "../graphql/mutations";
 
-function HomePage(props) {
+function HomePage() {
     const [newSection, setNewSection] = useState('')
 
-    const {data, loading, error} = useQuery(GET_SECTIONS)
+    const {data} = useQuery(GET_SECTIONS)
 
     const [createSection] = useMutation(CREATE_SECTION_MUTATION, {
         variables: { input:  newSection },

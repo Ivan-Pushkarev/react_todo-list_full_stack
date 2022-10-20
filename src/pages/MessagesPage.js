@@ -13,7 +13,7 @@ function MessagesPage() {
             setList(prev => [...prev, message])
         },
     })
-
+    console.log(data)
     const [createMessage] = useMutation( CREATE_MESSAGE_MUTATION ,
         {
             variables: {text: message, createdBy: 'React App'},
