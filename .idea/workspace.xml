@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="31c208d4-332a-4085-98b6-b07e0f582f80" name="Changes" comment="removed react buddy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/MessagesPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/MessagesPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,7 +259,21 @@
       <option name="project" value="LOCAL" />
       <updated>1666229741089</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="removed react buddy">
+      <created>1666287688919</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1666287688919</updated>
+    </task>
+    <task id="LOCAL-00018" summary="removed react buddy">
+      <created>1666287776261</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1666287776261</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,7 +299,8 @@
     <MESSAGE value="auth implementation" />
     <MESSAGE value="subscription done" />
     <MESSAGE value="react body" />
-    <option name="LAST_COMMIT_MESSAGE" value="react body" />
+    <MESSAGE value="removed react buddy" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed react buddy" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
