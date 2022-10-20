@@ -28,7 +28,7 @@ body {
 
 .header {
   color: white;
-  background: url(img/bright-background-with-dots_1055-3132.jpg);
+  background: url("./img/subtle_carbon.jpg");
   width: 100%;
   padding: 15px 0 15px;
   display: flex;
