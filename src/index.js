@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {ApolloClient, InMemoryCache, ApolloProvider, split, HttpLink,} from "@apollo/client";
-import { getMainDefinition } from '@apollo/client/utilities';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
+import {getMainDefinition} from '@apollo/client/utilities';
+import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
+import {createClient} from 'graphql-ws';
 
 import {BrowserRouter} from "react-router-dom";
+import {DevSupport} from "@react-buddy/ide-toolbox";
+import {ComponentPreviews, useInitial} from "./dev";
 
 const httpLink = new HttpLink({
     uri: 'http://localhost:8080/graphql',
@@ -21,7 +23,7 @@ const wsLink = new GraphQLWsLink(createClient({
 }));
 
 const splitLink = split(
-    ({ query }) => {
+    ({query}) => {
         const definition = getMainDefinition(query);
         return (
             definition.kind === 'OperationDefinition' &&
@@ -31,13 +33,6 @@ const splitLink = split(
     wsLink,
     httpLink,
 );
-// const httpLink = createHttpLink({
-//     uri: 'http://localhost:4000/graphql',
-//     credentials: 'include',
-//     headers: {
-//         'x-forwarded-proto': 'https'
-//     }
-// })
 
 const client = new ApolloClient({
     link: splitLink,
@@ -48,7 +43,11 @@ ReactDOM.render(
     <React.StrictMode>
         <ApolloProvider client={client}>
             <BrowserRouter>
-                <App/>
+                <DevSupport ComponentPreviews={ComponentPreviews}
+                            useInitialHook={useInitial}
+                >
+                    <App/>
+                </DevSupport>
             </BrowserRouter>
         </ApolloProvider>
     </React.StrictMode>,

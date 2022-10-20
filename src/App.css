@@ -242,5 +242,16 @@ li {
   font-style: italic;
   color: red;
 }
-
+.message {
+  width: 75%;
+  align-self: flex-start;
+  background-color: lightgray;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+.message.own {
+  align-self: end;
+  background-color: lightblue;
+}
 /*# sourceMappingURL=App.css.map */

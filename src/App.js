@@ -13,8 +13,7 @@ import MessagesPage from "./pages/MessagesPage";
 function App() {
 
     const {pathname} = useLocation()
-  //  const { data: auth} = useQuery(CURRENT_USER_QUERY);
-    const auth = false
+   const { data: auth} = useQuery(CURRENT_USER_QUERY);
     const isLoggedIn = !!auth?.currentUser;
 
     return (

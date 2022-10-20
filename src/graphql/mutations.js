@@ -72,3 +72,11 @@ export const LOGOUT_MUTATION = gql`
         logout
     }
 `
+export const CREATE_MESSAGE_MUTATION = gql`
+    mutation CreateMessage($text: String!, $createdBy: String!) {
+        createMessage(text: $text, createdBy: $createdBy) {
+            text
+            createdBy
+        }
+    }
+`
