@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="31c208d4-332a-4085-98b6-b07e0f582f80" name="Changes" comment="subscription done">
-      <change afterPath="$PROJECT_DIR$/src/dev/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/palette.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/previews.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/useInitial.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphql/mutations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/mutations.js" afterDir="false" />
+    <list default="true" id="31c208d4-332a-4085-98b6-b07e0f582f80" name="Changes" comment="react body">
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/MessagesPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/MessagesPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +145,7 @@
       <workItem from="1662242812925" duration="12534000" />
       <workItem from="1664387069499" duration="61248000" />
       <workItem from="1665697055556" duration="1801000" />
-      <workItem from="1666204058564" duration="3865000" />
+      <workItem from="1666204058564" duration="4586000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1631804723482</created>
@@ -264,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664765295522</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="react body">
+      <created>1666229741089</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1666229741089</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,7 +284,8 @@
     <MESSAGE value="base queries and mutations" />
     <MESSAGE value="auth implementation" />
     <MESSAGE value="subscription done" />
-    <option name="LAST_COMMIT_MESSAGE" value="subscription done" />
+    <MESSAGE value="react body" />
+    <option name="LAST_COMMIT_MESSAGE" value="react body" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

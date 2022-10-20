@@ -12,14 +12,16 @@ import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:8080/graphql',
+  //  uri: 'http://localhost:8080/graphql',
+    uri: 'https://pasv-todo.herokuapp.com/graphql',
     credentials: 'include',
     headers: {
         'x-forwarded-proto': 'https'
     }
 });
 const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://localhost:8080/graphql',
+   // url: 'ws://localhost:8080/graphql',
+    url: 'pasv-todo.herokuapp.com/graphql',
 }));
 
 const splitLink = split(
