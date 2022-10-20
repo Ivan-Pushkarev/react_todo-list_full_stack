@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Section from "../Section";
 import {useMutation, useQuery} from "@apollo/client";
 import {CURRENT_USER_QUERY, GET_SECTIONS} from "../graphql/queries";
